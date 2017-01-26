@@ -1,6 +1,18 @@
 /*************************************************************************                                                                     *
- * This app requires a config.js file in the path '/public/js/config.js' *
- ************************************************************************/
+ * This app requires a config.js file in the path '/public/js/config.js' 
+  
+ Sample config file:
+ 
+    var authKeys = ({
+        consumer_key: 'consumer key here',
+        consumer_secret: 'consumer secret here',
+        access_token: 'access token here',
+        access_token_secret: 'access token secret here'
+    });
+
+    module.exports = authKeys;
+
+************************************************************************/
 
 /*---------------------------------------
 * Requires and variables
@@ -11,6 +23,7 @@
 var authKeys = require('./public/js/config.js');
 var pd = require('./public/js/prettydate.js');
 var express = require('express');
+var Twit = require('twit');
 
 //Initial variables
 var app = express();
@@ -22,6 +35,14 @@ var username = 'brandon_ore';
 
 // Define port
 var port = process.env.PORT || 3000;
+
+// Authentication
+var T = new Twit({
+    consumer_key: authKeys.consumer_key,
+    consumer_secret: authKeys.consumer_secret,
+    access_token: authKeys.access_token,
+    access_token_secret: authKeys.access_token_secret
+});
 
 /*---------------------------------------
 * Set up server and route(s)
@@ -52,7 +73,7 @@ app.listen(port, function(){
 // Get timeline data
 function getInfo(path, params) {
     return new Promise(function(resolve, reject){
-        authKeys.T.get(path, params, function(error, data, response){
+        T.get(path, params, function(error, data, response){
             if(!error && response.statusCode === 200) {
                 resolve(data);
             } else {
