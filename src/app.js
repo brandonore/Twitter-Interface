@@ -31,7 +31,7 @@ var count = 5;
 var tweets;
 var friends;
 var messages;
-var username = 'brandon_ore';
+var username = '';
 
 // Define port
 var port = process.env.PORT || 3000;
@@ -101,6 +101,12 @@ function parseDate(data) {
 /*---------------------------------------
 * Call functions
 * ---------------------------------------*/
+
+// Get users screen_name
+getInfo('account/verify_credentials', {skip_status: true})
+    .then(function(data){
+        username = data.screen_name;
+    });
 
 // Get recent tweets
 getInfo('statuses/user_timeline', {screen_name: username, count: count})
